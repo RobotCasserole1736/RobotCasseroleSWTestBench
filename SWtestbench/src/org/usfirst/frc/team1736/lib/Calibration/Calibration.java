@@ -23,7 +23,6 @@ package org.usfirst.frc.team1736.lib.Calibration;
 * <br>
 * USAGE:    
 * <ol>   
-* <li>Instantiate a CalManager first (if not done yet)</li> 
 * <li>Instantiate the calibration with a default value, and reference to the wrangler</li> 
 * <li>At runtime, use the get() method to read the calibrated value. The returned value may change depending on what the wrangler has overwritten.</li>    
 * </ol>
@@ -33,11 +32,19 @@ package org.usfirst.frc.team1736.lib.Calibration;
 
 
 public class Calibration {
+	/** Default value the calibration will take on. */
 	public final double default_val;
+	/** Human-readable name for the calibration. */
 	public final String name;
+	/** Present value for the calibration. Starts at default_val, but might get changed*/
 	public volatile double cur_val;
+	/** True if the user has (somehow) made this calibration a non-default value*/
 	public volatile boolean overridden;
+	/** Gets set to true every time the cal value is changed. Software may optionally watch this boolean to see if the user has commanded a change, and then call the acknowledgeValUpdate() method to indicate they have processed the new value */
+	public boolean is_updated;
+	/** Upper limit on the allowed calibration range */
 	public double max_cal;
+	/** Lower limit on the allowed calibration range */
 	public double min_cal;
 	
 	/**
@@ -52,6 +59,7 @@ public class Calibration {
 		cur_val = default_val;
 		name = name_in.trim();
 		overridden = false;
+		is_updated = false;
 		min_cal = Double.NEGATIVE_INFINITY;
 		max_cal = Double.POSITIVE_INFINITY;
 		
@@ -81,6 +89,7 @@ public class Calibration {
 	
 	private void commonConstructor(){
 		overridden = false;
+		is_updated = false;
 		CalWrangler.register(this);
 	}
 	
@@ -109,6 +118,43 @@ public class Calibration {
 			return cur_val;
 		else
 			return default_val;
+	}
+	
+	/**
+	 * Check if the calibration has been changed by the user. 
+	 * Once the calibration has been changed, this method will continue to return
+	 * true until the user calls the acknowledgeValUpdate() method.
+	 * <br><br>
+	 * The intent of this functionality is to allow software the ability to run special
+	 * procedures if the value changes (ex: update and reset PID tune values). The acknowledgement
+	 * makes sure any code that cares about cal value changes can always see when a new one occurs.
+	 * <br><br>
+	 * Note you never technically have to worry about this, for most cases. If you're reading the
+	 * cal value every loop, you'll probably be ok. The bigger thing is when you need to not only
+	 * read the cal value, but also start over some other piece of code or something like that.
+	 * <br><br>
+	 * As I was typing the above paragraph, I began to have flashbacks to my parallel processing
+	 * classes in college, and just poked about 23472394732894 holes in my previous logic about
+	 * "always seeing changes in cal values". There's lots of ways to break it, especially if the 
+	 * cal updater and the code that cares are in different theads. Ah well. The redeeming characteristic 
+	 * of this case is the cal values <i>hopefully</i> won't change too fast, because they're human 
+	 * entered. This <i>should</i> mean that we always see the cycle of change-process-acknowledge cleanly,
+	 * but if we don't, well.... hmmm... let's just cross our fingers for now.
+	 * <br><br>
+	 * Isn't software fun? 
+	 * @return True if the calibration's value has changed at least once since the last acknowledgment, false if not.
+	 */
+	public boolean isChanged(){
+		return is_updated;
+	}
+	
+	/**
+	 * For bookkeeping purposes, mark that the cal value update has been processed. Not at all 
+	 * required to worry about, but can help with bookkeeping with code that must do something
+	 * when cal values are changed.
+	 */
+	public void acknowledgeValUpdate(){
+		is_updated = false;
 	}
 	
 	/**

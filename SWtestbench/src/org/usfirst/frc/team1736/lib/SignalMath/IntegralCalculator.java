@@ -34,7 +34,7 @@ public class IntegralCalculator {
 	private double prev_time;
 	
 	/** Present value of the accumulator. Use this if you want to know the value without adding another sample to the buffer. */
-	double accumulator;
+	public double accumulator;
 	private double[] point_num;
 	private int choice;
 	private double value;

@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,7 +19,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
+	// Physical Devices on Board in need of control  
 	PowerDistributionPanel pdp;
+	
+	//Software helpers
+	CasseroleWebServer webserver;
+	
+	
 	
     /**
      * This function is run when the robot is first started up and should be
@@ -25,8 +33,9 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	pdp = new PowerDistributionPanel();
-
+    	webserver = new CasseroleWebServer();
     	
+    	webserver.startServer();
     }
     
     

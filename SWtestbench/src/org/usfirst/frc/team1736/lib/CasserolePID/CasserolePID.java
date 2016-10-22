@@ -54,14 +54,14 @@ import org.usfirst.frc.team1736.lib.SignalMath.IntegralCalculator;
 public abstract class CasserolePID {
 
 	// PID Gain constants
-	private double Kp;  //Proportional
-	private double Ki;  //Integral
-	private double Kd;  //Derivative
-	private double Kf;  //Setpoint Feed-Forward
-	private double Kdf; //Setpoint Derivative Feed-Forward
-	private double Kp2; //Proportional Squared
+	protected double Kp;  //Proportional
+	protected double Ki;  //Integral
+	protected double Kd;  //Derivative
+	protected double Kf;  //Setpoint Feed-Forward
+	protected double Kdf; //Setpoint Derivative Feed-Forward
+	protected double Kp2; //Proportional Squared
 	
-	private boolean useErrForDerivTerm; //If true, derivative term is calculated using the error signal. Otherwise, use the "actual" value from the PID system.
+	protected boolean useErrForDerivTerm; //If true, derivative term is calculated using the error signal. Otherwise, use the "actual" value from the PID system.
 	
 	//Things for doing math
 	DerivativeCalculator dTermDeriv;
@@ -71,10 +71,10 @@ public abstract class CasserolePID {
 	public volatile double setpoint;
 	
 	//Value limiters
-	private double outputMin; //output limit
-	private double outputMax;
+	protected double outputMin; //output limit
+	protected double outputMax;
 	
-	private double integratorDisableThresh; // If the abs val of the error goes above this, disable and reset the integrator to prevent windup
+	protected double integratorDisableThresh; // If the abs val of the error goes above this, disable and reset the integrator to prevent windup
 	
 	//PID Thread
 	private Timer timerThread;
@@ -85,7 +85,7 @@ public abstract class CasserolePID {
 	//Watchdog Counter - counts up every time we run a periodic loop.
 	//An external obesrver can check this for positive verification the
 	//PID loop is still alive.
-	private volatile long watchdogCounter;
+	protected volatile long watchdogCounter;
 	
 	
 	/**
@@ -199,7 +199,7 @@ public abstract class CasserolePID {
 	protected abstract void usePIDOutput(double pidOutput);
 
 	//The big kahuna. This is where the magic happens.
-	private void periodicUpdate(){
+	protected void periodicUpdate(){
 		double curInput = returnPIDInput();
 		double curOutput = 0.0;
 		double curSetpoint = setpoint; //latch the setpoint at start of loop
