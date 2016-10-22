@@ -58,13 +58,8 @@ public abstract class casserolePathExecutor {
         timestep = 0; // reset timestamp
         timerThread = new java.util.Timer(); // create new thread for the playback function
         playbackActive = true; // Mark that playback has begun (or, will begin shortly)
-        timerThread.schedule(new PathPlanningPlayback(this), 0L, (long) ((double) PLANNER_SAMPLE_RATE_S * 1000)); // Kick
-                                                                                                                  // off
-                                                                                                                  // playback
-                                                                                                                  // thread.
-                                                                                                                  // Here
-                                                                                                                  // we
-                                                                                                                  // go!
+        //Kick off playback thread. Here we go!
+        timerThread.schedule(new PathPlanningPlayback(this), 0L, (long) ((double) PLANNER_SAMPLE_RATE_S * 1000)); 
         return 0;
     }
 
@@ -79,8 +74,9 @@ public abstract class casserolePathExecutor {
      */
     public int stopPlayback() {
         System.out.println("Stopping Path Planner");
-        if (timerThread != null)
+        if (timerThread != null){
             timerThread.cancel(); // kill thread, assuming it was running
+        }
         playbackActive = false; // set status to not running
         // Don't disable the PID's yet, it's important to keep them alive so they actually stop the
         // wheels from turning.
