@@ -4,6 +4,7 @@ package org.usfirst.frc.team1736.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,17 +25,34 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	pdp = new PowerDistributionPanel();
+
     	
     }
     
+    
+    
+    
 	/**
-	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
-	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
-	 * Dashboard, remove all of the chooser code and uncomment the getString line to get the auto name from the text box
-	 * below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional comparisons to the switch structure below with additional strings.
-	 * If using the SendableChooser make sure to add them to the chooser code above as well.
+	 * Runs once, right before disabled starts
+	 */
+    public void disabledInit() {
+
+    }
+    
+    /**
+     * This function is called periodically during disabled.
+     * Note, you cannot change any robot outputs during this mode.
+     */
+    public void disabledPeriodic() {
+    	
+    }
+   
+    
+    
+    
+    
+	/**
+	 * Runs once, right before autonomous starts
 	 */
     public void autonomousInit() {
 
@@ -45,6 +63,18 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
 
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Runs once, right before teleop starts
+     */
+    public void teleopInit() {
+    
     }
 
     /**
