@@ -1,13 +1,11 @@
 
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.BatteryParam.BatteryParamEstimator;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
+import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,6 +20,7 @@ public class Robot extends IterativeRobot {
 
     // Software helpers
     CasseroleWebServer webserver;
+    BatteryParamEstimator bpe;
 
 
 
@@ -32,6 +31,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         pdp = new PowerDistributionPanel();
         webserver = new CasseroleWebServer();
+        bpe = new BatteryParamEstimator(100);
 
         webserver.startServer();
     }
@@ -85,9 +85,16 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+        //Check if system voltage goes too low
         if (pdp.getVoltage() < 7.0) {
             System.out.println("AAAGUGUGUGAGUGAGUAAAHHH!!!!!!!!!1!!!");
         }
+        
+        //update estimator for batery parameters
+        bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+        
+        //Update what is displayed to the web server
+        updateWebStates();
 
     }
 
@@ -97,6 +104,17 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
 
+    }
+    
+    
+    /**
+     * This function updates the current state of the robot for the web server's display 
+     */
+    public void updateWebStates(){
+        CassesroleWebStates.putDouble("PDP Input Voltage (V)",       pdp.getVoltage());
+        CassesroleWebStates.putDouble("PDP Input Current (A)",       pdp.getTotalCurrent());
+        CassesroleWebStates.putDouble("Battery estimated ESR (ohm)", bpe.getEstESR());
+        CassesroleWebStates.putDouble("Battery estimated Voc (V)",   bpe.getEstVoc());
     }
 
 }
