@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
         pdp = new PowerDistributionPanel();
         webserver = new CasseroleWebServer();
         bpe = new BatteryParamEstimator(100);
-        CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer);
+        CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
         CsvLogger.addLoggingFieldDouble("PDBMeasVoltage", "V", "getVoltage", pdp);
         CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "I", "getCurrent", pdp);
         CsvLogger.addLoggingFieldDouble("BattEstVoc", "V", "getEstESR", bpe);
