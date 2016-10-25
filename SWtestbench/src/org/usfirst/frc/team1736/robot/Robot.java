@@ -2,10 +2,12 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.BatteryParam.BatteryParamEstimator;
+import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,6 +23,12 @@ public class Robot extends IterativeRobot {
     // Software helpers
     CasseroleWebServer webserver;
     BatteryParamEstimator bpe;
+    
+    //Performance tracking variables
+    double loopStartTime;
+    double loopEndTime;
+    double lastLoopTime;
+
 
 
 
@@ -32,6 +40,11 @@ public class Robot extends IterativeRobot {
         pdp = new PowerDistributionPanel();
         webserver = new CasseroleWebServer();
         bpe = new BatteryParamEstimator(100);
+        CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer);
+        CsvLogger.addLoggingFieldDouble("PDBMeasVoltage", "V", "getVoltage", pdp);
+        CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "I", "getCurrent", pdp);
+        CsvLogger.addLoggingFieldDouble("BattEstVoc", "V", "getEstESR", bpe);
+        CsvLogger.addLoggingFieldDouble("BattEstESR", "ohm", "getEstVoc", bpe);
 
         webserver.startServer();
     }
@@ -42,7 +55,8 @@ public class Robot extends IterativeRobot {
      * Runs once, right before disabled starts
      */
     public void disabledInit() {
-
+    	//Ensure any opened log is closed out and saved to disk
+    	CsvLogger.close();
     }
 
 
@@ -77,6 +91,7 @@ public class Robot extends IterativeRobot {
      * Runs once, right before teleop starts
      */
     public void teleopInit() {
+    	CsvLogger.init();
 
     }
 
@@ -85,6 +100,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	//mark start time of loop
+    	loopStartTime = Timer.getFPGATimestamp();
+    	
         //Check if system voltage goes too low
         if (pdp.getVoltage() < 7.0) {
             System.out.println("AAAGUGUGUGAGUGAGUAAAHHH!!!!!!!!!1!!!");
@@ -95,6 +113,15 @@ public class Robot extends IterativeRobot {
         
         //Update what is displayed to the web server
         updateWebStates();
+        
+        //Log Data
+        CsvLogger.logData(false);
+        
+        //mark end time of control loop
+        loopEndTime = Timer.getFPGATimestamp();
+        
+        //Calculate time taken
+        lastLoopTime = loopEndTime - loopStartTime;
 
     }
 
