@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
      * initialization code.
      */
     public void robotInit() {
-        pdp = new PowerDistributionPanel();
+        pdp = new PowerDistributionPanel(0);
         webserver = new CasseroleWebServer();
         bpe = new BatteryParamEstimator(100);
 
