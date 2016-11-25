@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class RIOLoadMonitor {
+public class CasseroleRIOLoadMonitor {
 	
 	/** Rate of update of the load variables in milliseconds. 1s should be enough? */
 	public static final int UPDATE_RATE_MS = 1000;
@@ -35,7 +35,7 @@ public class RIOLoadMonitor {
 	 * Constructor. Initalizes measurement system and starts a slow
 	 * background thread to gather load info
 	 */
-	public RIOLoadMonitor(){
+	public CasseroleRIOLoadMonitor(){
 		
 		//Reset give up flag
 		giveUp = false;

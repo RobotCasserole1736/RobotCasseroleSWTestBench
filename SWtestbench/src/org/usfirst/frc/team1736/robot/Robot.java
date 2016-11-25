@@ -2,7 +2,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.BatteryParam.BatteryParamEstimator;
-import org.usfirst.frc.team1736.lib.LoadMon.RIOLoadMonitor;
+import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
 
     // Software helpers
     CasseroleWebServer webserver;
-    RIOLoadMonitor loadmon;
+    CasseroleRIOLoadMonitor loadmon;
     BatteryParamEstimator bpe;
 
 
@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
         pdp = new PowerDistributionPanel(0);
         webserver = new CasseroleWebServer();
         bpe = new BatteryParamEstimator(100);
-        loadmon = new RIOLoadMonitor();
+        loadmon = new CasseroleRIOLoadMonitor();
 
         webserver.startServer();
     }
