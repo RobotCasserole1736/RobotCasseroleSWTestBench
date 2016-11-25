@@ -5,6 +5,34 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * DESCRIPTION: <br>
+ * Metric-gathering library to help track CPU load and memory load on-RIO, rather than just relying on the
+ * driver station logs. This enables users to do many things, including logging the loads along with other
+ * signals at runtime. This enables a more advanced level of debugging (ex: tracking load over many software releases,
+ * or noticing a correlation between RIO loads and physical values/states of the robot).
+ * <br>
+ * <br>
+ * Utilizes the fancy-schmancy virtual filesystem provided by the Linux kernel. "Files" under the /proc 
+ * can be read, and provide raw data indicating what the CPU times and memory usage are. Add in a bit of
+ * string parsing and math, and we're able to derive the metrics we care about from known-good sources.
+ * <br>
+ * <br>
+ * I do suppose this is kinda redundant with the metrics gathered by the driver station, but I would feel very
+ * warm and fuzzy just seeing the load metrics in a log along with all the other data. Just a personal preference.
+ * <br>
+ * <br>
+ * USAGE:
+ * <ol>
+ * <li>Instantiate Class. This will start periodic updates to the calculations of the 
+ * load metrics in the background./li>
+ * <li>Call getters to get the most recent CPU and memory load
+ * </li>
+ * </ol>
+ * 
+ * 
+ */
+
 public class CasseroleRIOLoadMonitor {
 	
 	/** Rate of update of the load variables in milliseconds. 1s should be enough? */
