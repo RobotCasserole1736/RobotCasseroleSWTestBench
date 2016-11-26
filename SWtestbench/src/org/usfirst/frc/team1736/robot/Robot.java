@@ -2,6 +2,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.BatteryParam.BatteryParamEstimator;
+import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -20,6 +21,7 @@ public class Robot extends IterativeRobot {
 
     // Software helpers
     CasseroleWebServer webserver;
+    CasseroleRIOLoadMonitor loadmon;
     BatteryParamEstimator bpe;
 
 
@@ -32,6 +34,7 @@ public class Robot extends IterativeRobot {
         pdp = new PowerDistributionPanel(0);
         webserver = new CasseroleWebServer();
         bpe = new BatteryParamEstimator(100);
+        loadmon = new CasseroleRIOLoadMonitor();
 
         webserver.startServer();
     }
@@ -115,6 +118,8 @@ public class Robot extends IterativeRobot {
         CassesroleWebStates.putDouble("PDP Input Current (A)",       pdp.getTotalCurrent());
         CassesroleWebStates.putDouble("Battery estimated ESR (ohm)", bpe.getEstESR());
         CassesroleWebStates.putDouble("Battery estimated Voc (V)",   bpe.getEstVoc());
+        CassesroleWebStates.putDouble("RoboRIO CPU Load (Pct)",      loadmon.getCPULoadPct());
+        CassesroleWebStates.putDouble("RoboRIO Memory Load (Pct)",   loadmon.getMemLoadPct());
     }
 
 }
