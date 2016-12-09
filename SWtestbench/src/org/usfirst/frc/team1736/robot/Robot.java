@@ -6,8 +6,14 @@ import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
+
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -17,9 +23,15 @@ import edu.wpi.first.wpilibj.Timer;
  * resource directory.
  */
 public class Robot extends IterativeRobot {
+	
+	Joystick joystick;
 
     // Physical Devices on Board in need of control
     PowerDistributionPanel pdp;
+    Compressor compressor;
+    Solenoid solenoid;
+    Spark spark;
+    Jaguar jaguar;
 
     // Software helpers
     CasseroleWebServer webserver;
@@ -43,12 +55,20 @@ public class Robot extends IterativeRobot {
         webserver = new CasseroleWebServer();
         bpe = new BatteryParamEstimator(100);
         loadmon = new CasseroleRIOLoadMonitor();
+        solenoid = new Solenoid(4);
+        spark = new Spark(0);
+        jaguar = new Jaguar(1);
+        joystick = new Joystick(0);
+        compressor = new Compressor();
 
         CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
         CsvLogger.addLoggingFieldDouble("PDBMeasVoltage", "V", "getVoltage", pdp);
         CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "I", "getCurrent", pdp);
         CsvLogger.addLoggingFieldDouble("BattEstVoc", "V", "getEstESR", bpe);
         CsvLogger.addLoggingFieldDouble("BattEstESR", "ohm", "getEstVoc", bpe);
+        CsvLogger.addLoggingFieldBoolean("SolenoidCommand", "On", "get", solenoid);
+        CsvLogger.addLoggingFieldDouble("SparkCommand", "percent", "getSpeed", spark);
+        CsvLogger.addLoggingFieldDouble("JaguarCommand", "percent", "getSpeed", jaguar);
 
         webserver.startServer();
     }
@@ -111,6 +131,9 @@ public class Robot extends IterativeRobot {
         if (pdp.getVoltage() < 7.0) {
             System.out.println("AAAGUGUGUGAGUGAGUAAAHHH!!!!!!!!!1!!!");
         }
+        
+        solenoid.set(joystick.getRawButton(1));
+        spark.set(joystick.getRawAxis(1));
         
         //update estimator for batery parameters
         bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
