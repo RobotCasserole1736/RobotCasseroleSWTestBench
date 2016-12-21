@@ -2,6 +2,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.BatteryParam.BatteryParamEstimator;
+import org.usfirst.frc.team1736.lib.CoProcessor.VisionListener;
 import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
     CasseroleWebServer webserver;
     CasseroleRIOLoadMonitor loadmon;
     BatteryParamEstimator bpe;
+    VisionListener bbbVisionProcesssor;
     
     //Performance tracking variables
     double loopStartTime;
@@ -60,6 +62,7 @@ public class Robot extends IterativeRobot {
         jaguar = new Jaguar(1);
         joystick = new Joystick(0);
         compressor = new Compressor();
+        bbbVisionProcesssor = new VisionListener("10.17.36.20", 5800);
 
         CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
         CsvLogger.addLoggingFieldDouble("PDBMeasVoltage", "V", "getVoltage", pdp);
@@ -71,6 +74,7 @@ public class Robot extends IterativeRobot {
         CsvLogger.addLoggingFieldDouble("JaguarCommand", "percent", "getSpeed", jaguar);
 
         webserver.startServer();
+        bbbVisionProcesssor.start();
     }
 
 
@@ -127,6 +131,9 @@ public class Robot extends IterativeRobot {
     	//mark start time of loop
     	loopStartTime = Timer.getFPGATimestamp();
     	
+    	//Lock in the latest data from the vision coprocessor
+    	bbbVisionProcesssor.sampleLatestData();
+    	
         //Check if system voltage goes too low
         if (pdp.getVoltage() < 7.0) {
             System.out.println("AAAGUGUGUGAGUGAGUAAAHHH!!!!!!!!!1!!!");
@@ -171,6 +178,16 @@ public class Robot extends IterativeRobot {
         CassesroleWebStates.putDouble("Battery estimated Voc (V)",   bpe.getEstVoc());
         CassesroleWebStates.putDouble("RoboRIO CPU Load (Pct)",      loadmon.getCPULoadPct());
         CassesroleWebStates.putDouble("RoboRIO Memory Load (Pct)",   loadmon.getMemLoadPct());
+        CassesroleWebStates.putDouble("BBB CoProcessor CPU Load (Pct)",   bbbVisionProcesssor.getCpuLoad());
+        CassesroleWebStates.putDouble("BBB CoProcessor Memory Load (Pct)",   bbbVisionProcesssor.getMemLoad());
+        CassesroleWebStates.putDouble("BBB CoProcessor FPS (frames/sec)",   bbbVisionProcesssor.getFPS());
+        CassesroleWebStates.putDouble("BBB CoProcessor Num Taragets",   bbbVisionProcesssor.getNumTargetsObserved());
+        
+        String tmp_str = "";
+        for(int i = 0; i < bbbVisionProcesssor.getNumTargetsObserved(); i++ ){
+            tmp_str += "[" + Double.toString(bbbVisionProcesssor.getX(i)) + "," + Double.toString(bbbVisionProcesssor.getY(i)) + "] ";
+        }
+        CassesroleWebStates.putString("BBB CoProcessor Target Centroids", tmp_str);
     }
 
 }
