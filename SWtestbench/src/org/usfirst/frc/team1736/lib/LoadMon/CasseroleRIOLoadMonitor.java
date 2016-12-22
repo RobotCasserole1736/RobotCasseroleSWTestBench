@@ -160,7 +160,7 @@ public class CasseroleRIOLoadMonitor {
 			double totalTime = totalInUseTime + deltaIdleTime;
 			
 			//Calculate CPU load to nearest tenth of percent
-			totalCPULoadPct = Math.round(totalInUseTime/totalTime * 1000.0)/10.0;
+			totalCPULoadPct = ((double)Math.round(totalInUseTime/totalTime * 1000.0))/10.0;
 			
 			
 			
@@ -210,7 +210,7 @@ public class CasseroleRIOLoadMonitor {
 			}
 			
 			//Mathy math math
-			totalMemUsedPct = Math.round((1.0 - curFreeMem/curTotalMem) * 1000.0)*10.0;
+			totalMemUsedPct = ((double)Math.round((1.0 - curFreeMem/curTotalMem) * 1000.0))/10.0;
 			
 			
 		} 

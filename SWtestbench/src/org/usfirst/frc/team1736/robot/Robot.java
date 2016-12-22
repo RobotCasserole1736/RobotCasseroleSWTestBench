@@ -93,6 +93,9 @@ public class Robot extends IterativeRobot {
      * outputs during this mode.
      */
     public void disabledPeriodic() {
+    	//Lock in the latest data from the vision coprocessor
+    	bbbVisionProcesssor.sampleLatestData();
+    	
     	//Update what is displayed to the web server
         updateWebStates();
 
@@ -181,6 +184,7 @@ public class Robot extends IterativeRobot {
         CassesroleWebStates.putDouble("Battery estimated Voc (V)",   bpe.getEstVoc());
         CassesroleWebStates.putDouble("RoboRIO CPU Load (Pct)",      loadmon.getCPULoadPct());
         CassesroleWebStates.putDouble("RoboRIO Memory Load (Pct)",   loadmon.getMemLoadPct());
+        CassesroleWebStates.putString("BBB CoProcessor Alive",   bbbVisionProcesssor.isCoProcessorAlive()?"True":"False");
         CassesroleWebStates.putDouble("BBB CoProcessor CPU Load (Pct)",   bbbVisionProcesssor.getCpuLoad());
         CassesroleWebStates.putDouble("BBB CoProcessor Memory Load (Pct)",   bbbVisionProcesssor.getMemLoad());
         CassesroleWebStates.putDouble("BBB CoProcessor FPS (frames/sec)",   bbbVisionProcesssor.getFPS());

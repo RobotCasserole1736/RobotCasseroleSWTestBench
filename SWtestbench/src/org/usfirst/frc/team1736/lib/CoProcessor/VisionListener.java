@@ -143,7 +143,14 @@ public class VisionListener {
     private double genericDoubleGet(String objname){
         double val = -1.0;
         if(userCurrObservation.containsKey(objname)){
-             val = (double) userCurrObservation.get(objname);
+        	if(userCurrObservation.get(objname).getClass().equals(Long.class)){
+              val = (double) ((Long)userCurrObservation.get(objname)).doubleValue();
+        	} else if (userCurrObservation.get(objname).getClass().equals(Double.class)){
+              val = (double) userCurrObservation.get(objname);
+        	} else {
+        		System.out.println("Warning: Cannot parse " + objname + " into a number. Malformed Json?");
+        	}
+             
         } 
         return val;
     }
