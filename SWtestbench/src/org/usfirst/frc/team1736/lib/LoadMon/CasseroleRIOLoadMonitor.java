@@ -123,6 +123,7 @@ public class CasseroleRIOLoadMonitor {
 				br.close();
 			} catch(IOException e){
 				System.out.println("WARNING: cannot get raw CPU load data. Giving up future attempts to read.");
+				e.printStackTrace();
 				giveUp = true;
 			}
 			
@@ -138,12 +139,13 @@ public class CasseroleRIOLoadMonitor {
 			double curSystemTime = 0;
 			double curIdleTime = 0;
 			try{
-				curUserTime = Double.parseDouble(tokens[1]);
-				curNicedTime = Double.parseDouble(tokens[2]);
-				curSystemTime = Double.parseDouble(tokens[3]);
-				curIdleTime = Double.parseDouble(tokens[4]);
+				curUserTime = Double.parseDouble(tokens[2]); //Start at 2, because RIO parses an extra empty token at 1
+				curNicedTime = Double.parseDouble(tokens[3]);
+				curSystemTime = Double.parseDouble(tokens[4]);
+				curIdleTime = Double.parseDouble(tokens[5]);
 			}catch(Exception e) {
 				System.out.println("WARNING: cannot parse CPU load. Giving up future attempts to read.");
+				e.printStackTrace();
 				giveUp = true;
 			}
 			
@@ -157,8 +159,8 @@ public class CasseroleRIOLoadMonitor {
 			double totalInUseTime = (deltaUserTime + deltaNicedTime + deltaSystemTime);
 			double totalTime = totalInUseTime + deltaIdleTime;
 			
-			//Calculate CPU load
-			totalCPULoadPct = totalInUseTime/totalTime * 100.0;
+			//Calculate CPU load to nearest tenth of percent
+			totalCPULoadPct = Math.round(totalInUseTime/totalTime * 1000.0)/10.0;
 			
 			
 			
@@ -186,6 +188,7 @@ public class CasseroleRIOLoadMonitor {
 				br.close();
 			} catch(IOException e){
 				System.out.println("WARNING: cannot get raw memory load data. Giving up future attempts to read.");
+				e.printStackTrace();
 				giveUp = true;
 			}
 			
@@ -202,11 +205,12 @@ public class CasseroleRIOLoadMonitor {
 				curFreeMem = Double.parseDouble(memFreeTokens[1]);
 			}catch(Exception e) {
 				System.out.println("WARNING: cannot parse memory load. Giving up future attempts to read.");
+				e.printStackTrace();
 				giveUp = true;
 			}
 			
 			//Mathy math math
-			totalMemUsedPct = (1.0 - curFreeMem/curTotalMem) * 100.0;
+			totalMemUsedPct = Math.round((1.0 - curFreeMem/curTotalMem) * 1000.0)*10.0;
 			
 			
 		} 

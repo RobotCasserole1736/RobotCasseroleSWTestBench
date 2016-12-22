@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
 
         CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
         CsvLogger.addLoggingFieldDouble("PDBMeasVoltage", "V", "getVoltage", pdp);
-        CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "I", "getCurrent", pdp);
+        CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "I", "getTotalCurrent", pdp);
         CsvLogger.addLoggingFieldDouble("BattEstVoc", "V", "getEstESR", bpe);
         CsvLogger.addLoggingFieldDouble("BattEstESR", "ohm", "getEstVoc", bpe);
         CsvLogger.addLoggingFieldBoolean("SolenoidCommand", "On", "get", solenoid);
@@ -93,6 +93,8 @@ public class Robot extends IterativeRobot {
      * outputs during this mode.
      */
     public void disabledPeriodic() {
+    	//Update what is displayed to the web server
+        updateWebStates();
 
     }
 
@@ -120,6 +122,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopInit() {
     	CsvLogger.init();
+    	compressor.setClosedLoopControl(false);
 
     }
 
@@ -182,6 +185,7 @@ public class Robot extends IterativeRobot {
         CassesroleWebStates.putDouble("BBB CoProcessor Memory Load (Pct)",   bbbVisionProcesssor.getMemLoad());
         CassesroleWebStates.putDouble("BBB CoProcessor FPS (frames/sec)",   bbbVisionProcesssor.getFPS());
         CassesroleWebStates.putDouble("BBB CoProcessor Num Taragets",   bbbVisionProcesssor.getNumTargetsObserved());
+        CassesroleWebStates.putDouble("BBB CoProcessor Frame Counter",   bbbVisionProcesssor.getFrameCounter());
         
         String tmp_str = "";
         for(int i = 0; i < bbbVisionProcesssor.getNumTargetsObserved(); i++ ){

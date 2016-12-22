@@ -166,7 +166,7 @@ public class CsvLogger {
         }
         // Catch ALL the errors!!!
         catch (IOException e) {
-            System.out.println("Error initalizing log file: " + e.getMessage());
+            System.out.println("ERROR - cannot initalize log file: " + e.getMessage());
             return -1;
         }
         System.out.println("done!");
@@ -185,7 +185,7 @@ public class CsvLogger {
      */
     public static int logData(boolean forceSync) {
         if (!log_open) {
-            System.out.println("Error - Log is not yet opened, cannot write!");
+            //System.out.println("ERROR - Log is not yet opened, cannot write!");
             return -1;
         }
 

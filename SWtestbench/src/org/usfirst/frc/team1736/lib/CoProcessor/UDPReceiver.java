@@ -65,7 +65,7 @@ public class UDPReceiver{
                     if(rx_string.length() != 0){
                         // We have a packet and there are no more in the recieve queue. Break and return the last packet one.
                         last_packet = true; 
-                        System.out.println(rx_string);
+                        //System.out.println(rx_string);
                     }
                 } catch (IOException e) {
                     /* some other error we didn't think about... don't try to listen anymore */
