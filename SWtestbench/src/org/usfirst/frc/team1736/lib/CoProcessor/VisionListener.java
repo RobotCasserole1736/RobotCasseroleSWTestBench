@@ -44,7 +44,7 @@ public class VisionListener {
     public double EXPECTED_MAX_UPDATE_RATE_HZ = 35.0;
     
     //If this much time goes by without getting a packet, we will start to say the processor is no longer turned on.
-    public long COPROCESSOR_ACTIIVE_TIMEOUT_MS = 3000;
+    public long COPROCESSOR_ACTIIVE_TIMEOUT_MS = 750;
     
     // Mutithreading academic dissertation time! 
     // The present and previous observations represent a total set of data which must be updated atomically. 

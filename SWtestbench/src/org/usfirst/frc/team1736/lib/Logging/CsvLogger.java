@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.Vector;
+
+import edu.wpi.first.wpilibj.RobotState;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
@@ -125,9 +128,17 @@ public class CsvLogger {
     	return log_open;
     }
 
+    private static String getOpModeName() {
+    	if(RobotState.isAutonomous()){
+    		return "Auto";
+    	} else {
+    		return "Teleop";
+    	}
+    }
 
     private static String getDateTimeString() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hhmmssa");
+    	//Yes, I could have made this ISO, but I'm american and this format looks nicer to me.
+        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy_hh.mm.ssa");
         df.setTimeZone(TimeZone.getTimeZone("US/Central"));
         return df.format(new Date());
     }
@@ -149,13 +160,17 @@ public class CsvLogger {
         }
 
         log_open = false;
-        System.out.println("Initalizing Log file...");
+
+        // Determine a unique file name
+        log_name = output_dir + "log_" + getDateTimeString() + "_" + getOpModeName() + ".csv";
+        System.out.println("Initalizing Log file  " + log_name);
+        
+        
         try {
             // Reset state variables
             log_write_index = 0;
 
-            // Determine a unique file name
-            log_name = output_dir + "log_" + getDateTimeString() + ".csv";
+
             
             // create directories, if they don't exist
             File tempPathObj = new File(output_dir);
@@ -186,7 +201,7 @@ public class CsvLogger {
             System.out.println("ERROR - cannot initalize log file: " + e.getMessage());
             return -1;
         }
-        System.out.println("done!");
+
         log_open = true;
         return 0;
 
