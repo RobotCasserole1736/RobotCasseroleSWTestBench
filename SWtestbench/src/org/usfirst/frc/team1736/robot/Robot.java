@@ -66,12 +66,12 @@ public class Robot extends IterativeRobot {
 
         CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
         CsvLogger.addLoggingFieldDouble("PDBMeasVoltage", "V", "getVoltage", pdp);
-        CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "I", "getTotalCurrent", pdp);
-        CsvLogger.addLoggingFieldDouble("BattEstVoc", "V", "getEstESR", bpe);
-        CsvLogger.addLoggingFieldDouble("BattEstESR", "ohm", "getEstVoc", bpe);
+        CsvLogger.addLoggingFieldDouble("PDBMeasCurrent", "A", "getTotalCurrent", pdp);
+        CsvLogger.addLoggingFieldDouble("BattEstESR", "ohm", "getEstESR", bpe);
+        CsvLogger.addLoggingFieldDouble("BattEstVoc", "V", "getEstVoc", bpe);
         CsvLogger.addLoggingFieldBoolean("SolenoidCommand", "On", "get", solenoid);
-        CsvLogger.addLoggingFieldDouble("SparkCommand", "percent", "getSpeed", spark);
-        CsvLogger.addLoggingFieldDouble("JaguarCommand", "percent", "getSpeed", jaguar);
+        CsvLogger.addLoggingFieldDouble("SparkCommand", "cmd", "getSpeed", spark);
+        CsvLogger.addLoggingFieldDouble("JaguarCommand", "cmd", "getSpeed", jaguar);
 
         webserver.startServer();
         bbbVisionProcesssor.start();
@@ -84,7 +84,9 @@ public class Robot extends IterativeRobot {
      */
     public void disabledInit() {
     	//Ensure any opened log is closed out and saved to disk
-    	CsvLogger.close();
+    	if(CsvLogger.isLogOpen()){
+    		CsvLogger.close();
+    	}
     }
 
 

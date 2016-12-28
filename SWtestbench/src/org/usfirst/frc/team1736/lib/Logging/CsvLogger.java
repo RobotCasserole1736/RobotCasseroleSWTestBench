@@ -2,10 +2,13 @@ package org.usfirst.frc.team1736.lib.Logging;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.invoke.MethodHandle;
@@ -48,7 +51,7 @@ public class CsvLogger {
 
     static long log_write_index;
     static String log_name = null;
-    static String output_dir = "/U/data_captures_2016/"; // USB drive is mounted to /U on roboRIO
+    static String output_dir = "/U/data_captures/"; // USB drive is mounted to /U on roboRIO
     static BufferedWriter log_file = null;
     static boolean log_open = false;
 
@@ -113,10 +116,20 @@ public class CsvLogger {
         return 0;
 
     }
+    
+    /**
+     * Check whether there is presently a log file open and being written to.
+     * @return True if there is an open log file, false otherwise.
+     */
+    public static boolean isLogOpen(){
+    	return log_open;
+    }
 
 
     private static String getDateTimeString() {
-        return new SimpleDateFormat("yyyy-MM-dd_HHmmss").format(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hhmmssa");
+        df.setTimeZone(TimeZone.getTimeZone("US/Central"));
+        return df.format(new Date());
     }
 
 
@@ -143,6 +156,10 @@ public class CsvLogger {
 
             // Determine a unique file name
             log_name = output_dir + "log_" + getDateTimeString() + ".csv";
+            
+            // create directories, if they don't exist
+            File tempPathObj = new File(output_dir);
+            tempPathObj.mkdirs();
 
             // Open File
             FileWriter fstream = new FileWriter(log_name, true);
@@ -193,7 +210,6 @@ public class CsvLogger {
             forceSync();
 
         try {
-            log_file.write(Double.toString(log_write_index) + ", ");
             for (int i = 0; i < methodHandles.size(); i++) {
                 MethodHandle mh = methodHandles.get(i);
                 String fieldName = dataFieldNames.get(i);
