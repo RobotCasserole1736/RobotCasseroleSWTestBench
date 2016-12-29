@@ -24,6 +24,7 @@ public class AveragingFilter {
     private double[] circ_buffer; // circular buffer to hold all values
     private double sum; // hold sum of all numbers in the buffer at all times.
     private int index; // "pointer" to the starting index in the buffer
+    private double nominal_val; //initial value of filter (usually zero)
 
 
     /**
@@ -40,9 +41,8 @@ public class AveragingFilter {
         // Allocate buffer
         circ_buffer = new double[N];
         // Fill the buffer with the initial value
-        Arrays.fill(circ_buffer, init_val);
-        // Calculate initial sum
-        sum = N * init_val;
+        nominal_val = init_val;
+        reset();
     }
 
 
@@ -64,6 +64,15 @@ public class AveragingFilter {
         index = (index + 1) % N;
         // Return average = sum/length
         return sum / N;
+    }
+    
+    /**
+     * Resets filter back to initial conditions
+     */
+    public void reset(){
+        Arrays.fill(circ_buffer, nominal_val);
+        // Calculate initial sum
+        sum = N * nominal_val;
     }
 
 }

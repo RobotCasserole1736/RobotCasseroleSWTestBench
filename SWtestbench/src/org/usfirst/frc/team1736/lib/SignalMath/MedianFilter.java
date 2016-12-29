@@ -25,6 +25,7 @@ public class MedianFilter {
     int N; // length of filter
     double[] circ_buffer; // circular buffer to hold all values
     int index; // "pointer" to the starting index in the buffer
+    double nominal_val;// reset value of the filter (usually zero)
 
 
     /**
@@ -42,8 +43,8 @@ public class MedianFilter {
         N = length;
         // Allocate buffer
         circ_buffer = new double[N];
-        // Fill the buffer with the initial value
-        Arrays.fill(circ_buffer, init_val);
+        nominal_val = init_val;
+        reset();
     }
 
 
@@ -75,6 +76,11 @@ public class MedianFilter {
             return (temp_buffer[middle - 1] + temp_buffer[middle]) / 2;
         }
 
+    }
+    
+    public void reset(){
+        // Fill the buffer with the initial value
+        Arrays.fill(circ_buffer, nominal_val);
     }
 
 }

@@ -42,7 +42,7 @@ import javax.swing.*;
  *
  */
 
-class FalconLinePlot extends JPanel implements ClipboardOwner {
+public class FalconLinePlot extends JPanel implements ClipboardOwner {
 
 
     private static final long serialVersionUID = 3205256608145459434L;
@@ -831,6 +831,13 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
             return false;
         }
     }
+    
+    /**
+     * Re-draw the figure with whatever new data has been added since the last draw
+     */
+    public void redraw(){
+    	this.update(this.getGraphics());
+    }
 
 
     /****** TEST MAIN METHOD *******/
@@ -853,6 +860,7 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
 
         fig2.addData(data2, Color.blue);
 
+        fig2.redraw();
         FalconLinePlot fig1 = new FalconLinePlot(test, data);
 
     }
