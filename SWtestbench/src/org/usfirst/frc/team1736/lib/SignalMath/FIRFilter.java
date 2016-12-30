@@ -72,6 +72,9 @@ public class FIRFilter {
             case HIGHPASS_5HZ:
                 coefs = FilterCoefs.highpass5HzCoef;
                 break;
+            case LOWPASS_2HZ_FAST:
+                coefs = FilterCoefs.lowpass2HzFastCoef;
+                break;
             default: // Definitely should never get here, cuz enum
                 coefs = new double[0]; // the most boring filter of them all.
                 break;
@@ -129,6 +132,13 @@ public class FIRFilter {
         }
 
         present_out_val = local_result;
+    }
+    
+    /**
+     * Set all values to zero in the buffer
+     */
+    public void reset(){
+        sampleBuffer.reset();
     }
 
 

@@ -231,5 +231,47 @@ final public class FilterCoefs {
             -0.009336024978007965, -0.0028602018855811637, 0.0030818647274722115, 0.007010623881300626,
             0.008301227861706622, 0.0071633418813247356, 0.004363911182665122, 0.0007977974162187222,
             -0.0029806100538400312, -0.007117555196887919, -0.012681527102987767, 0.011318609012951645};
+    
+    /**
+     * 11-tap filter. Phase Delay = 0.22s
+     * <table style="border: 1px solid black">
+     * <tr style="border: 1px solid black">
+     * <td style="border: 1px solid black">Zone</td>
+     * <td style="border: 1px solid black">Start</td>
+     * <td style="border: 1px solid black">End</td>
+     * <td style="border: 1px solid black">Nominal Gain</td>
+     * <td style="border: 1px solid black">Ripple</td>
+     * </tr>
+     * 
+     * <tr style="border: 1px solid black">
+     * <td style="border: 1px solid black">Passband</td>
+     * <td style="border: 1px solid black">0 Hz</td>
+     * <td style="border: 1px solid black">2 Hz</td>
+     * <td style="border: 1px solid black">0 dB</td>
+     * <td style="border: 1px solid black">1.01 dB</td>
+     * </tr>
+     * 
+     * <tr style="border: 1px solid black">
+     * <td style="border: 1px solid black">Stopband</td>
+     * <td style="border: 1px solid black">12 Hz</td>
+     * <td style="border: 1px solid black">25 Hz</td>
+     * <td style="border: 1px solid black">-60 dB</td>
+     * <td style="border: 1px solid black">-66.73 dB</td>
+     * </tr>
+     * </table>
+     */
+    public static final double lowpass2HzFastCoef[] = {
+            0.005441185321521823,
+            0.025496849730843586,
+            0.06731320832012262,
+            0.12517518560454086,
+            0.17764786648608316,
+            0.19899976425943253,
+            0.17764786648608316,
+            0.12517518560454086,
+            0.06731320832012262,
+            0.025496849730843586,
+            0.005441185321521823
+          };
 
 }

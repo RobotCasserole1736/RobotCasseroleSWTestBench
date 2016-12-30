@@ -6,5 +6,5 @@ package org.usfirst.frc.team1736.lib.SignalMath;
  *
  */
 public enum FilterType {
-    LOWPASS_2HZ, LOWPASS_5HZ, LOWPASS_15HZ, HIGHPASS_2HZ, HIGHPASS_5HZ
+    LOWPASS_2HZ, LOWPASS_5HZ, LOWPASS_15HZ, HIGHPASS_2HZ, HIGHPASS_5HZ, LOWPASS_2HZ_FAST
 }
